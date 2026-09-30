@@ -1,1 +1,1229 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Corrections Facility Tracker</title>
+
+<style>
+
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #080d12;
+    --panel: #111922;
+    --panel-dark: #0e151d;
+    --border: #263746;
+
+    --text: #e7edf2;
+    --muted: #8293a3;
+
+    --blue: #38a8e8;
+    --red: #ef6848;
+    --green: #50b985;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 24px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at top,
+            #17232d 0%,
+            var(--bg) 48%
+        );
+}
+
+
+/* =========================
+   MAIN APPLICATION
+========================= */
+
+.app {
+    width: min(1400px, 100%);
+    height: min(850px, calc(100vh - 48px));
+
+    min-height: 620px;
+
+    margin: auto;
+
+    background: var(--bg);
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: #131d26;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.badge {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid #a77b27;
+    border-radius: 7px;
+
+    color: #d5a33c;
+
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.subtitle {
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* HEADER NUMBERS */
+
+.header-stats {
+    display: flex;
+
+    gap: 25px;
+
+    font-size: 10px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+
+    letter-spacing: .8px;
+}
+
+.header-stats strong {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 18px;
+}
+
+.header-stats .inmates strong {
+    color: var(--red);
+}
+
+.header-stats .officers strong {
+    color: #5798ef;
+}
+
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.main {
+    height: calc(100% - 70px);
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        315px;
+}
+
+
+/* =========================
+   MAP
+========================= */
+
+.map-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    border-right: 1px solid var(--border);
+
+    background: #080d11;
+}
+
+.map-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    object-position: center;
+}
+
+
+/* =========================
+   MAP MARKERS
+========================= */
+
+.marker {
+    position: absolute;
+
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background: #0d1820;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s,
+        box-shadow .15s;
+}
+
+.marker:hover {
+    transform:
+        translate(-50%, -50%)
+        scale(1.25);
+}
+
+
+/* BLUE MARKERS */
+
+.marker.blue {
+    border: 2px solid var(--blue);
+
+    box-shadow:
+        0 0 10px rgba(56,168,232,.35);
+}
+
+
+/* RED MARKER */
+
+.marker.red {
+    border: 2px solid var(--red);
+
+    box-shadow:
+        0 0 10px rgba(239,104,72,.35);
+}
+
+
+/*
+    MOVE THE THREE MARKERS
+
+    Change the percentages
+    to move them around the map.
+*/
+
+#marker1 {
+    left: 47%;
+    top: 48%;
+}
+
+#marker2 {
+    left: 40%;
+    top: 57%;
+}
+
+#marker3 {
+    left: 30%;
+    top: 57%;
+}
+
+
+/* =========================
+   MAP LEGEND
+========================= */
+
+.map-label {
+    position: absolute;
+
+    left: 18px;
+    bottom: 16px;
+
+    padding: 9px 12px;
+
+    background: rgba(7,12,17,.85);
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    border-radius: 5px;
+
+    color: #aab8c4;
+
+    font-size: 10px;
+}
+
+.legend {
+    display: flex;
+
+    gap: 14px;
+
+    margin-top: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+}
+
+.legend-dot.blue {
+    background: var(--blue);
+}
+
+.legend-dot.red {
+    background: var(--red);
+}
+
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.side {
+    display: grid;
+
+    grid-template-rows:
+        45%
+        55%;
+
+    background: var(--panel-dark);
+}
+
+.side-panel {
+    min-height: 0;
+
+    overflow: hidden;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+/* PANEL HEADERS */
+
+.panel-header {
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 15px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: #8ea1b2;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* LIVE INDICATOR */
+
+.live {
+    color: var(--green);
+
+    font-size: 10px;
+
+    letter-spacing: 0;
+
+    text-transform: none;
+}
+
+.live::before {
+    content: "";
+
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+
+    margin-right: 6px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 7px rgba(80,185,133,.6);
+}
+
+
+/* =========================
+   PERSON LIST
+========================= */
+
+.people {
+    height: calc(100% - 45px);
+
+    overflow-y: auto;
+
+    padding: 6px;
+}
+
+.person {
+    width: 100%;
+
+    text-align: left;
+
+    color: var(--text);
+
+    background: #121b24;
+
+    border: 1px solid transparent;
+
+    border-radius: 7px;
+
+    padding: 12px;
+
+    margin-bottom: 6px;
+
+    cursor: pointer;
+
+    transition:
+        background .15s,
+        border-color .15s;
+}
+
+.person:hover,
+.person.active {
+    background: #18232d;
+
+    border-color: #2d4354;
+}
+
+.person-name {
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.person-location {
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+/* INMATE STATUS */
+
+.status {
+    float: right;
+
+    border: 1px solid var(--red);
+
+    color: var(--red);
+
+    border-radius: 10px;
+
+    padding: 2px 7px;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile {
+    height: calc(100% - 45px);
+
+    overflow-y: auto;
+
+    padding: 16px;
+}
+
+
+/* DEFAULT PROFILE */
+
+.profile-empty {
+    height: 100%;
+
+    display: grid;
+
+    place-items: center;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    padding: 30px;
+}
+
+
+/* PROFILE NAME */
+
+.profile-title {
+    margin-bottom: 12px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   ID PHOTO
+========================= */
+
+.photo {
+    width: 105px;
+    height: 125px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 14px;
+
+    overflow: hidden;
+
+    background: #0b1117;
+
+    border: 1px dashed #526575;
+
+    border-radius: 5px;
+
+    color: #667988;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================
+   PROFILE INFORMATION
+========================= */
+
+.profile-meta {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+.meta-box {
+    padding: 8px;
+
+    background: #121b24;
+
+    border: 1px solid #21303d;
+
+    border-radius: 5px;
+}
+
+.meta-label {
+    color: #718392;
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .8px;
+}
+
+.meta-value {
+    margin-top: 4px;
+
+    font-size: 11px;
+}
+
+
+/* PROFILE DESCRIPTION */
+
+.profile-description {
+    color: #aab7c1;
+
+    font-size: 11px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    body {
+        padding: 0;
+    }
+
+    .app {
+        height: 100vh;
+
+        min-height: 600px;
+
+        border-radius: 0;
+    }
+
+    .main {
+        grid-template-columns: 1fr;
+
+        grid-template-rows:
+            55%
+            45%;
+
+        overflow-y: auto;
+    }
+
+    .map-panel {
+        border-right: 0;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .side {
+        min-height: 500px;
+    }
+
+    .header-stats {
+        display: none;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="badge">
+            MRC
+        </div>
+
+        <div>
+
+            <div class="title">
+                Facility Tracker
+            </div>
+
+            <div class="subtitle">
+                Melbourne Remand Centre · Live Positions
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-stats">
+
+        <div class="inmates">
+
+            Inmates
+
+            <strong>
+                03
+            </strong>
+
+        </div>
+
+
+        <div class="officers">
+
+            Officers
+
+            <strong>
+                00
+            </strong>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+
+<!-- =========================
+     MAP
+========================= -->
+
+<section class="map-panel">
+
+    <!--
+        CHANGE map.png TO YOUR MAP IMAGE.
+
+        Example:
+
+        <img src="prison-map.jpg">
+
+    -->
+
+    <img
+        class="map-image"
+        src="map.png"
+        alt="Facility map"
+    >
+
+
+    <!-- BLUE MARKER -->
+
+    <button
+        class="marker blue"
+        id="marker1"
+        onclick="selectPerson(0)"
+        aria-label="Open prisoner 1">
+    </button>
+
+
+    <!-- BLUE MARKER -->
+
+    <button
+        class="marker blue"
+        id="marker2"
+        onclick="selectPerson(1)"
+        aria-label="Open prisoner 2">
+    </button>
+
+
+    <!-- RED MARKER -->
+
+    <button
+        class="marker red"
+        id="marker3"
+        onclick="selectPerson(2)"
+        aria-label="Open prisoner 3">
+    </button>
+
+
+    <!-- MAP LEGEND -->
+
+    <div class="map-label">
+
+        MAP
+
+        <div class="legend">
+
+            <span class="legend-item">
+
+                <span class="legend-dot blue"></span>
+
+                Blue marker
+
+            </span>
+
+
+            <span class="legend-item">
+
+                <span class="legend-dot red"></span>
+
+                Red marker
+
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     RIGHT SIDE
+========================= -->
+
+<aside class="side">
+
+
+<!-- =========================
+     PERSONNEL PANEL
+========================= -->
+
+<section class="side-panel">
+
+    <div class="panel-header">
+
+        <span>
+            Personnel
+        </span>
+
+        <span class="live">
+            Live
+        </span>
+
+    </div>
+
+
+    <div class="people">
+
+
+        <!-- PERSON 1 -->
+
+        <button
+            class="person"
+            onclick="selectPerson(0)"
+        >
+
+            <span class="status">
+                Inmate
+            </span>
+
+            <div class="person-name">
+                INMATE NAME 01
+            </div>
+
+            <div class="person-location">
+                Location · Cell Block
+            </div>
+
+        </button>
+
+
+
+        <!-- PERSON 2 -->
+
+        <button
+            class="person"
+            onclick="selectPerson(1)"
+        >
+
+            <span class="status">
+                Inmate
+            </span>
+
+            <div class="person-name">
+                INMATE NAME 02
+            </div>
+
+            <div class="person-location">
+                Location · Workshop
+            </div>
+
+        </button>
+
+
+
+        <!-- PERSON 3 -->
+
+        <button
+            class="person"
+            onclick="selectPerson(2)"
+        >
+
+            <span class="status">
+                Inmate
+            </span>
+
+            <div class="person-name">
+                INMATE NAME 03
+            </div>
+
+            <div class="person-location">
+                Location · Medbay
+            </div>
+
+        </button>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     PROFILE PANEL
+========================= -->
+
+<section class="side-panel">
+
+
+    <div class="panel-header">
+
+        <span>
+            Profile
+        </span>
+
+        <span id="profile-id">
+            —
+        </span>
+
+    </div>
+
+
+
+    <div
+        class="profile"
+        id="profile"
+    >
+
+        <div class="profile-empty">
+
+            Select a name or map marker
+            <br>
+            to view the profile.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</aside>
+
+</main>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   PRISONER DATA
+=========================
+
+   Change the information here.
+
+   You can add more prisoners
+   later if you want.
+*/
+
+const prisoners = [
+
+    {
+
+        name: "INMATE NAME 01",
+
+        id: "ID-0001",
+
+        location: "Cell Block",
+
+        status: "Inmate",
+
+        /*
+            Put an image filename here.
+
+            Example:
+
+            photo: "photos/john.jpg"
+
+            Leave it empty for now.
+        */
+
+        photo: "",
+
+        description:
+            "This is the main profile description. Replace this text with the inmate's basic information, custody notes, history, charges, or other information you want displayed."
+
+    },
+
+
+    {
+
+        name: "INMATE NAME 02",
+
+        id: "ID-0002",
+
+        location: "Workshop",
+
+        status: "Inmate",
+
+        photo: "",
+
+        description:
+            "Replace this paragraph with the second inmate's information."
+
+    },
+
+
+    {
+
+        name: "INMATE NAME 03",
+
+        id: "ID-0003",
+
+        location: "Medbay",
+
+        status: "Inmate",
+
+        photo: "",
+
+        description:
+            "Replace this paragraph with the third inmate's information."
+
+    }
+
+];
+
+
+
+/* =========================
+   OPEN PROFILE
+========================= */
+
+function selectPerson(index) {
+
+    const person =
+        prisoners[index];
+
+
+    /*
+        Highlight selected person
+    */
+
+    document
+        .querySelectorAll(".person")
+        .forEach((element, i) => {
+
+            element.classList.toggle(
+                "active",
+                i === index
+            );
+
+        });
+
+
+    /*
+        Put ID in profile header
+    */
+
+    document
+        .getElementById("profile-id")
+        .textContent =
+        person.id;
+
+
+
+    /*
+        Create photo
+
+        If there is no photo,
+        show "ID PHOTO".
+    */
+
+    const photoHTML = person.photo
+
+        ? `<img
+              src="${person.photo}"
+              alt="ID photo"
+           >`
+
+        : `<span>
+              ID PHOTO
+           </span>`;
+
+
+
+    /*
+        Build profile
+    */
+
+    document
+        .getElementById("profile")
+        .innerHTML = `
+
+        <div class="profile-title">
+
+            ${person.name}
+
+        </div>
+
+
+        <div class="photo">
+
+            ${photoHTML}
+
+        </div>
+
+
+        <div class="profile-meta">
+
+
+            <div class="meta-box">
+
+                <div class="meta-label">
+
+                    Prisoner ID
+
+                </div>
+
+                <div class="meta-value">
+
+                    ${person.id}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="meta-box">
+
+                <div class="meta-label">
+
+                    Status
+
+                </div>
+
+                <div class="meta-value">
+
+                    ${person.status}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="meta-box">
+
+                <div class="meta-label">
+
+                    Location
+
+                </div>
+
+                <div class="meta-value">
+
+                    ${person.location}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="meta-box">
+
+                <div class="meta-label">
+
+                    Custody
+
+                </div>
+
+                <div class="meta-value">
+
+                    Active
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="profile-description">
+
+            ${person.description}
+
+        </div>
+
+    `;
+
+}
+
+
+</script>
+
+</body>
+</html>
